@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizar Profesor</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/27763c0bc0.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <div id="header"></div>
+    <script>
+        load_header();
+        function load_header() {
+            document.getElementById("header").innerHTML = '<header class="font-sans font-semibold bg-white shadow-lg "><nav><ul class="p-5 flex justify-start space-x-10 ml-16">'+
+                '<li class="inline-block hover:opacity-75 rounded-md transition-all p-1 active: transition-all"><a href="../../index.html">' +
+                '<i class="fa-solid fa-house-chimney"></i> Inicio</a></li>' +
+                '<li class="inline-block hover:opacity-75 rounded-md transition-all p-1 active: transition-all"><a href="../../IndexDepartamento.html">' +
+                '<i class="fa-solid fa-building"></i> Departamentos</a></li><li class="inline-block hover:opacity-75 rounded-md transition-all p-1 active: transition-all">' +
+                '<a href="../../IndexProfesores.html"><i class="fa-solid fa-user-tie"></i> Profesores</a></li>' +
+                '<li class="inline-block hover:opacity-75 rounded-md transition-all p-1 active: transition-all"><a href="../../IndexCursos.html"><i class="fa-solid fa-book"></i>' +
+                ' Cursos</a></li></ul></nav></header>';
+        }
+
+    </script>
+
+    <label class="my-5 flex justify-center uppercase tracking-wide text-gray-700 text-xl font-bold mb-2"
+        for="grid-password">
+        Actualizar Profesor
+    </label>
+
+    <div class="flex justify-center">
+        <form class="w-full max-w-lg" method="post" id="formulario">
+            <div id="legend">
+
+            </div>
+            <div class="grid grid-cols-2">
+                <div class="justify-end">
+                    <button
+                        class="shadow bg-teal-400 hover:bg-teal-300 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+                        type="submit">
+                        Enviar
+                    </button>
+                </div>
+                <div class="grid justify-end">
+                    <button
+                        class="shadow bg-sky-400 hover:bg-sky-300 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+                        type="reset">
+                        Limpiar
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        function rellenarFormulario(idC) {
+            var id = (Object.values(idC))[0];
+            $.get(`http://localhost/IWEBB/semana13/Laboratorio13/Servidor/profesor.php?id=${id}`,
+                function (data,
+                    status) {
+                    var obj = JSON.parse(data);
+                    var i = 0;
+                    let str = '';
+                    console.log(obj)
+
+                    str += llenar(obj)
+                    console.log(str);
+                    document.getElementById('legend').innerHTML = str;
+                    llenarSelect()
+                })
+        }
+        function llenar(data) {
+            return `<div class="flex flex-wrap -mx-3 mb-6">
+                <div class="w-full px-3">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="profesores">
+                        Departamento
+                    </label>
+                    <select id="txtDepartamento" name="txtDepartamento"
+                        class="block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white 
+                        focus:border-gray-500">
+                    </select>
+                </div>
+            </div>
+            <div class="flex flex-wrap -mx-3 mb-6">
+                <div class="w-full px-3">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
+                        Nombre
+                    </label>
+                    <input
+                        class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white 
+                        focus:border-gray-500" id="txtNombre" name="txtNombre" value="${data.nombre}" type="text">
+                </div>
+            </div>
+            <div class="flex flex-wrap -mx-3 mb-6">
+                <div class="w-full px-3">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
+                        Dirección
+                    </label>
+                    <input
+                        class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none 
+                        focus:bg-white focus:border-gray-500" id="txtDireccion" name="txtDireccion" value="${data.direccion}" type="text">
+                </div>
+            </div>
+            <div class="flex flex-wrap -mx-3 mb-6">
+                <div class="w-full px-3">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                        for="grid-password">
+                        Teléfono
+                    </label>
+                    <input
+                        class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none 
+                        focus:bg-white focus:border-gray-500" id="txtTelefono" name="txtTelefono" value="${data.telefono}" type="text">
+                </div>
+            </div>`;
+        }
+
+        var queryid = new URLSearchParams(window.location.search);
+        var idC = Object.fromEntries(queryid.entries());
+        var id = (Object.values(idC))[0]
+        rellenarFormulario(idC);
+        
+        var legend = document.getElementById('legend');
+        var formulario = document.getElementById('formulario');
+        var respuesta = document.getElementById('respuesta');
+        formulario.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var datos = new FormData(formulario);
+            data = {};
+            datos.forEach(function (value, key) {
+                data[key] = value;
+            });
+            console.log(data)
+            $.ajax({
+                url: `http://localhost/IWEBB/semana13/Laboratorio13/Servidor/profesor.php?id=${id}`,
+                type: "PUT",
+                dataType: 'json',
+                data: data,
+                success: function (response) {
+                    console.log(response)
+                    window.location.href = '../../IndexProfesores.html';
+                },
+                error: function (response) {
+                    respuesta.innerHTML = `<div class="alert alert-danger" role="alert">Error! debes rellenar los campos</div>`
+                    console.log(response);
+                }
+            });
+        })
+        function llenarSelect() {
+            var departamento = document.getElementById('txtDepartamento');
+            $.get(`http://localhost/IWEBB/semana13/Laboratorio13/Servidor/depto.php`, function (data, status) {
+                var obj = JSON.parse(data);
+                var str = '';
+                obj.map(item => {
+                    str += `<option value="${item.depto_id}" id="txtDepartamento" name="txtDepartamento" selected>${item.nombre}</option>`;
+                })
+                departamento.innerHTML = str;
+            })
+        }
+    </script>
+</body>
+
+</html>

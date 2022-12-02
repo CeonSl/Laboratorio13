@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Departamentos</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous">
+        </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/27763c0bc0.js" crossorigin="anonymous"></script>
+    <script src="js/importHeader.js"></script>
+</head>
+
+<body>
+    <div id="header"></div>
+    <script>
+        load_header();
+        function load_header() {
+            document.getElementById("header").innerHTML = '<header class="font-sans font-semibold bg-white shadow-lg "><nav><ul class="p-5 flex justify-start space-x-10 ml-16">' +
+                '<li class="inline-block hover:opacity-75 rounded-md transition-all p-1 active: transition-all"><a href="index.html"><i class="fa-solid fa-house-chimney"></i> Inicio' +
+                '</a></li><li class="inline-block hover:opacity-75 rounded-md transition-all p-1 active: transition-all"><a href="IndexDepartamento.html">' +
+                '<i class="fa-solid fa-building"></i> Departamentos</a></li><li class="inline-block hover:opacity-75 rounded-md transition-all p-1 active: transition-all">' +
+                '<a href="IndexProfesores.html"><i class="fa-solid fa-user-tie"></i> Profesores</a></li>' +
+                '<li class="inline-block hover:opacity-75 rounded-md transition-all p-1 active: transition-all"><a href="IndexCursos.html"> Cursos</a></li></ul></nav></header>';
+        }
+
+    </script>
+
+    <div class="text-2xl font-bold flex justify-center mt-10">
+        <h1>Listado de Departamentos</h1>
+    </div>
+
+    <div id="respuestaIndex">
+
+    </div>
+
+    <div class=" inline-block ml-10 my-5">
+        <a href="CRUD/Deptos/Registrar.html"
+            class="bg-green-500 hover:bg-green-700  text-white font-bold py-1 px-2 border border-green-500 rounded">Nuevo</a>
+    </div>
+
+    <div class="flex justify-center ">
+        <table class="w-3/4 border-collapse block md:table ">
+            <thead class="block md:table-header-group">
+                <tr
+                    class="border border-grey-500 md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto  md:relative ">
+                    <th
+                        class="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+                        No</th>
+                    <th
+                        class="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+                        Nombre</th>
+                    <th
+                        class="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+                        Director</th>
+                    <th
+                        class="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+                        Descripción</th>
+                    <th
+                        class="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+                        Opciones</th>
+                </tr>
+            </thead>
+            <tbody class="block md:table-row-group" id="table">
+
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        crearTabla()
+
+        function crearTabla() {
+            $.get(`http://localhost/IWEBB/semana13/Laboratorio13/Servidor/depto.php`,
+                function (data,
+                    status) {
+                    var obj = JSON.parse(data);
+                    var i = 0;
+                    let str = '';
+                    obj.map(item => {
+                        i++
+                        str += `
+        <tr class="bg-gray-300 border border-grey-500 md:border-none block md:table-row">
+            <td class="p-2 md:border md:border-grey-500 text-left block md:table-cell">${i}</td>
+            <td class="p-2 md:border md:border-grey-500 text-left block md:table-cell">${item.nombre}</td>
+            <td class="p-2 md:border md:border-grey-500 text-left block md:table-cell">${item.director}</td>
+            <td class="p-2 md:border md:border-grey-500 text-left block md:table-cell">${item.descripcion}</td>
+            <td class="p-2 md:border md:border-grey-500 text-left block md:table-cell">${crearBotones(item.depto_id)}</td>
+        </tr>
+        `;
+                    })
+
+                    document.getElementById('table').innerHTML = str;
+                })
+
+        }
+
+        function crearBotones(id) {
+            return '<a href="CRUD/Deptos/Actualizar.html?id=' + id + '" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 border border-blue-500 rounded mr-2">Editar '+
+                '</a><a href="#" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 border border-red-500 rounded" onclick="clickEliminar(' + id + ')">Eliminar </a>';
+        }
+
+        function clickEliminar(id) {
+
+            var respuesta = document.getElementById('respuestaIndex');
+            $.ajax({
+                url: 'http://localhost/IWEBB/semana13/Laboratorio13/Servidor/depto.php?id=' + id,
+                type: 'DELETE',
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
+                    crearTabla()
+                    respuesta.innerHTML = `    <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3 mx-40" role="alert">
+        <div class="flex">
+            <div class="py-1"><svg class="fill-current h-6 w-6 text-teal-500 mr-4" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20">
+                    <path
+                        d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z" />
+                </svg></div>
+                Eliminado Correctamente
+        </div>
+    </div>`;
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

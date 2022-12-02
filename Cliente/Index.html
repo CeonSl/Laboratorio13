@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio 13</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/27763c0bc0.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="header"></div>
+    <script>
+        load_header();
+function load_header() {
+    document.getElementById("header").innerHTML = '<header class="font-sans font-semibold bg-white shadow-lg "><nav><ul class="p-5 flex justify-start space-x-10 ml-16">' +
+        '<li class="inline-block hover:opacity-75 rounded-md transition-all p-1 active: transition-all"><a href="index.html"><i class="fa-solid fa-house-chimney"></i> Inicio' +
+        '</a></li><li class="inline-block hover:opacity-75 rounded-md transition-all p-1 active: transition-all"><a href="IndexDepartamento.html">' +
+        '<i class="fa-solid fa-building"></i> Departamentos</a></li><li class="inline-block hover:opacity-75 rounded-md transition-all p-1 active: transition-all">' +
+        '<a href="IndexProfesores.html"><i class="fa-solid fa-user-tie"></i> Profesores</a></li>' +
+        '<li class="inline-block hover:opacity-75 rounded-md transition-all p-1 active: transition-all"><a href="IndexCursos.html"> Cursos</a></li></ul></nav></header>';
+}
+
+    </script>
+
+
+</body>
+
+</html>
